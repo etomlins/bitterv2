@@ -105,6 +105,40 @@ paths:
         404:
           $ref: "#/components/responses/404NotFound"
 
+  /users/{userId}/timelines/home:
+    get:
+      summary: Retrieve a user's Home Timeline
+      parameters:
+        - $ref: "#/components/parameters/userId"
+      responses:
+        200:
+          description: User Home Timeline retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HomeTimeline"
+        404:
+          $ref: "#/components/responses/404NotFound"
+        401:
+          $ref: "#/components/responses/401Unauthorized"
+
+  /users/{userId}/timelines/tweets:
+    get:
+      summary: Retrieve a user's Tweets Timeline
+      parameters:
+        - $ref: "#/components/parameters/userId"
+      responses:
+        200:
+          description: User Tweets Timeline retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserTimeline"
+        404:
+          $ref: "#/components/responses/404NotFound"
+        401:
+          $ref: "#/components/responses/401Unauthorized"
+
   /tweets:
     post:
       summary: Create a new tweet
@@ -236,7 +270,7 @@ paths:
     post:
       summary: Like a tweet
       parameters:
-        - $ref: "#/components/parameters/tweetId"
+        - $ref: "#/components/parameters/userId"
       requestBody:
         required: true
         content:
@@ -335,7 +369,7 @@ paths:
           content:
             application/json:
               schema:
-                - $ref: "#/components/schemas/Tweet"
+                $ref: "#/components/schemas/Tweet"
         401:
           $ref: "#/components/responses/401Unauthorized"
         404:
@@ -397,6 +431,34 @@ components:
           type: string
         authorId:
           type: string
+
+    HomeTimeline:
+      type: object
+      properties:
+        tweets:
+          type: array
+          items:
+            $ref: "#/components/schemas/Tweet"
+        userId:
+          $ref: "#/components/parameters/userId"
+      required:
+        - tweets
+        - userId
+
+    UserTimeline:
+      type: object
+      properties:
+        tweets:
+          type: array
+          items:
+            $ref: "#/components/schemas/Tweet"
+        user:
+          type: object
+          items:
+            $ref: "#/components/schemas/User"
+      required:
+        - tweets
+        - user
 
   parameters:
     userId:
